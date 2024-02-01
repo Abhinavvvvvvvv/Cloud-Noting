@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const fetchuser = require('../middleware/fetchuser')
+const fetchuser = require("../middleware/fetchuser");
 
 const JWT_SECRET = "Abhinavisagood$oi";
 
@@ -16,7 +16,7 @@ router.post(
   [
     body("name", "Enter a valid Name").isLength({ min: 3 }),
     body("email", "Enter a valid Email").isEmail(),
-    body("password", "Enter must be atleast 6 characters").isLength({ min: 6 }),
+    body("password", "Password must be atleast 6 characters").isLength({ min: 6 }),
   ],
   async (req, res) => {
     //If there are errors, return Bad  request
@@ -100,13 +100,14 @@ router.post(
 
 //ROUTE 3: Get logged in User deatils using: POST "/api/auth/getuser". Login required
 router.post(
-  "/getuser",  // 1st Parameter which is Endpoint
-  fetchuser,   // 2nd Parameter which is Middleware
-  async (req, res) => {         //3rd Parameter which is function with req and res
+  "/getuser", // 1st Parameter which is Endpoint
+  fetchuser, // 2nd Parameter which is Middleware
+  async (req, res) => {
+    //3rd Parameter which is function with req and res
     try {
       userId = req.user.id;
       const user = await User.findById(userId).select("-password");
-      res.send(user)
+      res.send(user);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal server error");

@@ -2,5 +2,6 @@ db.js
 index.js
 auth.js
 notes.js
-Notes.js
+Note.js
 User.js
+fetchusers.js
