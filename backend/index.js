@@ -8,9 +8,6 @@ const express = require("express");
 const app = express();
 const port = 5000;
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
 app.use(express.json());
 
@@ -23,5 +20,5 @@ app.use("/api/auth", authRouter);
 app.use("/api/notes", notesRouter);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Cloud Noting listening at http://localhost:${port}`);
 });
