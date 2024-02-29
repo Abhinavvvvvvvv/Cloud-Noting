@@ -81,7 +81,8 @@ router.post(
 
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
-        return res.status(400).json({ error: "Please try again" });
+        success = false
+        return res.status(400).json({ success, error: "Please try again" });
       }
 
       const payload = {
@@ -90,7 +91,8 @@ router.post(
         },
       };
       const authTokken = jwt.sign(payload, JWT_SECRET);
-      res.json({ authTokken });
+      const success = true;
+      res.json({ success, authTokken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal server error");
