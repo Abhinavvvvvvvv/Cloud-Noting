@@ -1,7 +1,7 @@
 import { React, useState } from "react";
-import { Form, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function SignUp() {
+function SignUp(props) {
   const [credentials, setCredentials] = useState({
     name: "",
     email: "",
@@ -31,6 +31,10 @@ function SignUp() {
         // Save the auth tokken in local storage
         localStorage.getItem("tokken", json.authTokken);
         navigate("/");
+        props.showAlert("Account created successfully", "Success")
+      }
+      else{
+        props.showAlert("Invalid details", "Danger")
       }
     } catch (error) {
       console.error("Error:", error);
@@ -42,6 +46,8 @@ function SignUp() {
   };
   return (
     <div className="container">
+      <div className="mt-2"></div>
+      <h2 className="my-2">Create an account</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">

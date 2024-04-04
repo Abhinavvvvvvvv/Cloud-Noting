@@ -19,10 +19,11 @@ router.post(
     body("password", "Password must be atleast 6 characters").isLength({ min: 6 }),
   ],
   async (req, res) => {
+    let success = false;
     //If there are errors, return Bad  request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success, errors: errors.array() });
     }
     // Check whether this email exists already
 
@@ -34,7 +35,7 @@ router.post(
       secPassword = await bcrypt.hash(req.body.password, salt);
 
       user
-        ? res.status(400).json({ error: "An Email already exists" })
+        ? res.status(400).json({ success, error: "An Email already exists" })
         : (user = await User.create({
             //CREATING USER HERE
             name: req.body.name,
@@ -50,7 +51,8 @@ router.post(
       const authTokken = jwt.sign(data, JWT_SECRET);
 
       // res.json({ user });
-      res.json({ authTokken });
+      success = true;
+      res.json({ success, authTokken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal server error");
@@ -66,6 +68,7 @@ router.post(
     body("password", "Password cannot be blank").exists(),
   ],
   async (req, res) => {
+    let success = false
     //If there are errors, return Bad  request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -76,6 +79,7 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
+        success = false
         return res.status(400).json({ error: "Please try again" });
       }
 
@@ -91,7 +95,7 @@ router.post(
         },
       };
       const authTokken = jwt.sign(payload, JWT_SECRET);
-      const success = true;
+      success = true;
       res.json({ success, authTokken });
     } catch (error) {
       console.error(error.message);

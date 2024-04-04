@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-function Login() {
+function Login(props) {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   let navigate = useNavigate()
 
@@ -21,12 +21,13 @@ function Login() {
       const json = await response.json();
       console.log(json);
       if(json.success){
-        // Save the auth tokken in local storage
-        localStorage.getItem('tokken', json.authTokken);
+        // Save the auth tokken in local storage and redirect
+        localStorage.setItem('tokken', json.authTokken);
+        props.showAlert("Logged in successfully", 'success')
         navigate('/')
       }
       else{
-        // Alert
+        props.showAlert("Inavalid credentials", "danger")
       }
     } catch (error) {
       console.error("Error:", error);
@@ -40,6 +41,8 @@ function Login() {
 
   return (
     <div>
+      <div className="mt-2"></div>
+      <h2 className="my-2">Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label my-4">
